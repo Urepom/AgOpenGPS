@@ -4,10 +4,12 @@ using AgOpenGPS.Properties;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Media;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -122,12 +124,6 @@ namespace AgOpenGPS
         /// </summary>
         public CMazeGrid mazeGrid;
 
-        // couple of quick AB's
-        public CQuicks AB0 = new CQuicks("Original", 2, 2, 2);
-
-        public CQuicks AB1 = new CQuicks("North South", 0, 0, 0);
-        public CQuicks AB2 = new CQuicks("East West", 90, 0, 0);
-
         /// <summary>
         /// Contour Mode Instance
         /// </summary>
@@ -223,6 +219,12 @@ namespace AgOpenGPS
         /// </summary>
         public CWorkSwitch workSwitch;
 
+        /// <summary>
+        /// Sound for approaching boundary
+        /// </summary>
+        public SoundPlayer sndBoundaryAlarm;
+
+
         #endregion // Class Props and instances
 
         // Constructor, Initializes a new instance of the "FormGPS" class.
@@ -234,7 +236,7 @@ namespace AgOpenGPS
             btnManualAutoDrive.Text = gStr.gsAbout;
 
             //file menu
-            fileToolStripMenuItem.Text = gStr.gsFile;
+            //fileToolStripMenuItem.Text = gStr.gsFile;
             setWorkingDirectoryToolStripMenuItem.Text = gStr.gsDirectories;
             enterSimCoordsToolStripMenuItem.Text = gStr.gsEnterSimCoords;
             loadVehicleToolStripMenuItem.Text = gStr.gsLoadVehicle;
@@ -245,7 +247,7 @@ namespace AgOpenGPS
             menustripLanguage.Text = gStr.gsLanguage;
                 
             //Display Menu
-            settingsToolStripMenuItem.Text = gStr.gsDisplay;
+            //settingsToolStripMenuItem.Text = gStr.gsDisplay;
             resetALLToolStripMenuItem.Text = gStr.gsResetAll;
             colorsToolStripMenuItem.Text = gStr.gsColors;
             toolStripUnitsMenu.Text = gStr.gsUnits;
@@ -291,6 +293,10 @@ namespace AgOpenGPS
             toolstripExit.Text = gStr.gsExit;
             toolstripBoundary.Text = gStr.gsBoundary;
             toolstripResetTrip.Text = gStr.gsZeroTrip;
+
+            //NTRIP
+            this.lblWatch.Text = gStr.gsWaitingForGPS;
+            this.lblNTRIPSeconds.Text = gStr.gsNTRIPOff;
 
 
             //build the gesture structures
@@ -402,10 +408,6 @@ namespace AgOpenGPS
         //Initialize items before the form Loads or is visible
         private void FormGPS_Load(object sender, EventArgs e)
         {
-            //tooltips of controls
-            ToolTip ToolTip1 = new ToolTip();
-            ToolTip1.SetToolTip(btnABLine, "Set and configure\n an ABLine");
-
             this.MouseWheel += ZoomByMouseWheel;
 
             if (Settings.Default.setF_workingDirectory == "Default")
@@ -436,6 +438,17 @@ namespace AgOpenGPS
                     Settings.Default.setF_CurrentDir = "";
                     Settings.Default.Save();
                 }
+            }
+
+            string directoryName = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string wave = Path.Combine(directoryName, "Dependencies\\Audio", "Boundary.Wav");
+            if (File.Exists(wave))
+            {
+                 sndBoundaryAlarm = new SoundPlayer(wave);
+            }
+            else
+            {
+                 sndBoundaryAlarm = new SoundPlayer(Properties.Resources.Alarm10);
             }
 
             //grab the current vehicle filename - make sure it exists
@@ -547,7 +560,7 @@ namespace AgOpenGPS
             //boundaryTriggerDistance = Settings.Default.setF_boundaryTriggerDistance;
 
             //load the last used auto turn shape
-            string fileAndDir = @".\YouTurnShapes\" + Properties.Settings.Default.setAS_youTurnShape;
+            string fileAndDir = @".\Dependencies\YouTurnShapes\" + Properties.Settings.Default.setAS_youTurnShape;
             yt.LoadYouTurnShapeFromFile(fileAndDir);
 
             //sim.latitude = Settings.Default.setSim_lastLat;
@@ -633,11 +646,13 @@ namespace AgOpenGPS
         // Procedures and Functions ---------------------------------------
         public uint LoadGLTextures()
         {
+            //sndRedAlert.Play();
+
             GL.Enable(EnableCap.Texture2D);
             try
             {
                 string directoryName = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-                string text = Path.Combine(directoryName, "Dependencies", "Landscape.png");
+                string text = Path.Combine(directoryName, "Dependencies\\images", "Landscape.png");
                 if (File.Exists(text))
                 {
                     using (Bitmap bitmap = new Bitmap(text))
@@ -659,7 +674,7 @@ namespace AgOpenGPS
             }
             try
             {
-                string text2 = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Dependencies", "Floor.png");
+                string text2 = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Dependencies\\Images", "Floor.png");
                 if (File.Exists(text2))
                 {
                     using (Bitmap bitmap2 = new Bitmap(text2))
@@ -679,73 +694,73 @@ namespace AgOpenGPS
                 //WriteErrorLog("Loading Floor Texture" + ex2);
                 MessageBox.Show("Texture File FLOOR.PNG is Missing", ex2.Message);
             }
-            try
-            {
-                string text2 = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Dependencies", "Vehicle.png");
-                if (File.Exists(text2))
-                {
-                    using (Bitmap bitmap2 = new Bitmap(text2))
-                    {
-                        GL.GenTextures(1, out texture[2]);
-                        GL.BindTexture(TextureTarget.Texture2D, texture[2]);
-                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMinFilter.Nearest);
-                        BitmapData bitmapData2 = bitmap2.LockBits(new Rectangle(0, 0, bitmap2.Width, bitmap2.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmapData2.Width, bitmapData2.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bitmapData2.Scan0);
-                        bitmap2.UnlockBits(bitmapData2);
-                    }
-                }
-            }
-            catch (Exception ex2)
-            {
-                //WriteErrorLog("Loading Floor Texture" + ex2);
-                MessageBox.Show("Texture File Vehicle.PNG is Missing", ex2.Message);
-            }
-            try
-            {
-                string text2 = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Dependencies", "Compass.png");
-                if (File.Exists(text2))
-                {
-                    using (Bitmap bitmap2 = new Bitmap(text2))
-                    {
-                        GL.GenTextures(1, out texture[3]);
-                        GL.BindTexture(TextureTarget.Texture2D, texture[3]);
-                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMinFilter.Nearest);
-                        BitmapData bitmapData2 = bitmap2.LockBits(new Rectangle(0, 0, bitmap2.Width, bitmap2.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmapData2.Width, bitmapData2.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bitmapData2.Scan0);
-                        bitmap2.UnlockBits(bitmapData2);
-                    }
-                }
-            }
-            catch (Exception ex2)
-            {
-                //WriteErrorLog("Loading Floor Texture" + ex2);
-                MessageBox.Show("Texture File Compass.PNG is Missing", ex2.Message);
-            }
+            //try
+            //{
+            //    string text2 = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Dependencies\\Images", "Vehicle.png");
+            //    if (File.Exists(text2))
+            //    {
+            //        using (Bitmap bitmap2 = new Bitmap(text2))
+            //        {
+            //            GL.GenTextures(1, out texture[2]);
+            //            GL.BindTexture(TextureTarget.Texture2D, texture[2]);
+            //            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            //            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMinFilter.Nearest);
+            //            BitmapData bitmapData2 = bitmap2.LockBits(new Rectangle(0, 0, bitmap2.Width, bitmap2.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            //            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmapData2.Width, bitmapData2.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bitmapData2.Scan0);
+            //            bitmap2.UnlockBits(bitmapData2);
+            //        }
+            //    }
+            //}
+            //catch (Exception ex2)
+            //{
+            //    //WriteErrorLog("Loading Floor Texture" + ex2);
+            //    MessageBox.Show("Texture File Vehicle.PNG is Missing", ex2.Message);
+            //}
+            //try
+            //{
+            //    string text2 = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Dependencies\images", "Compass.png");
+            //    if (File.Exists(text2))
+            //    {
+            //        using (Bitmap bitmap2 = new Bitmap(text2))
+            //        {
+            //            GL.GenTextures(1, out texture[3]);
+            //            GL.BindTexture(TextureTarget.Texture2D, texture[3]);
+            //            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
+            //            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMinFilter.Nearest);
+            //            BitmapData bitmapData2 = bitmap2.LockBits(new Rectangle(0, 0, bitmap2.Width, bitmap2.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            //            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmapData2.Width, bitmapData2.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bitmapData2.Scan0);
+            //            bitmap2.UnlockBits(bitmapData2);
+            //        }
+            //    }
+            //}
+            //catch (Exception ex2)
+            //{
+            //    //WriteErrorLog("Loading Floor Texture" + ex2);
+            //    MessageBox.Show("Texture File Compass.PNG is Missing", ex2.Message);
+            //}
 
-            try
-            {
-                string text2 = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Dependencies", "Output.png");
-                if (File.Exists(text2))
-                {
-                    using (Bitmap bitmap2 = new Bitmap(text2))
-                    {
-                        GL.GenTextures(1, out texture[4]);
-                        GL.BindTexture(TextureTarget.Texture2D, texture[4]);
-                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, 9729);
-                        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, 9729);
-                        BitmapData bitmapData2 = bitmap2.LockBits(new Rectangle(0, 0, bitmap2.Width, bitmap2.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-                        GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmapData2.Width, bitmapData2.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bitmapData2.Scan0);
-                        bitmap2.UnlockBits(bitmapData2);
-                    }
-                }
-            }
-            catch (Exception ex2)
-            {
-                //WriteErrorLog("Loading Floor Texture" + ex2);
-                MessageBox.Show("Texture File OUPUT.PNG is Missing", ex2.Message);
-            }
+            //try
+            //{
+            //    string text2 = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Dependencies", "Output.png");
+            //    if (File.Exists(text2))
+            //    {
+            //        using (Bitmap bitmap2 = new Bitmap(text2))
+            //        {
+            //            GL.GenTextures(1, out texture[4]);
+            //            GL.BindTexture(TextureTarget.Texture2D, texture[4]);
+            //            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, 9729);
+            //            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, 9729);
+            //            BitmapData bitmapData2 = bitmap2.LockBits(new Rectangle(0, 0, bitmap2.Width, bitmap2.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            //            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmapData2.Width, bitmapData2.Height, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bitmapData2.Scan0);
+            //            bitmap2.UnlockBits(bitmapData2);
+            //        }
+            //    }
+            //}
+            //catch (Exception ex2)
+            //{
+            //    //WriteErrorLog("Loading Floor Texture" + ex2);
+            //    MessageBox.Show("Texture File OUPUT.PNG is Missing", ex2.Message);
+            //}
 
             return texture[0];
         }// Load Bitmaps And Convert To Textures
@@ -807,13 +822,13 @@ namespace AgOpenGPS
             {
                 isLogElevation = false;
                 btnRecordElevation.Image = Properties.Resources.BoundaryRecord;
-                btnRecordElevation.Text = "Record Elevation";
+                btnRecordElevation.Text = gStr.gsRecordElevation;
             }
             else
             {
                 isLogElevation = true;
                 btnRecordElevation.Image = Properties.Resources.boundaryStop;
-                btnRecordElevation.Text = "Stop Record";
+                btnRecordElevation.Text = gStr.gsStopRecord;
             }
         }
 
@@ -844,17 +859,17 @@ namespace AgOpenGPS
         public void GetAB()
         {
             curve.isOkToAddPoints = false;
-            curve.isCurveSet = false;
-            DisableYouTurnButtons();
+            //curve.isCurveSet = false;
+            //DisableYouTurnButtons();
             btnContourPriority.Enabled = false;
-            curve.isCurveBtnOn = false;
-            btnCurve.Image = Properties.Resources.CurveOff;
+            //curve.isCurveBtnOn = false;
+            //btnCurve.Image = Properties.Resources.CurveOff;
 
-            ABLine.isABLineSet = false;
+            //ABLine.isABLineSet = false;
             ABLine.tramPassEvery = 0;
             ABLine.passBasedOn = 0;
-            btnABLine.Image = Properties.Resources.ABLineOff;
-            ABLine.isBtnABLineOn = false;
+            //btnABLine.Image = Properties.Resources.ABLineOff;
+            //ABLine.isBtnABLineOn = false;
 
             if (ct.isContourBtnOn) { if (ct.isContourBtnOn) btnContour.PerformClick(); }
 
@@ -865,7 +880,13 @@ namespace AgOpenGPS
                 if (result == DialogResult.OK)
                 {
                 }
+                ABLine.moveDistance = 0;
+                curve.moveDistance = 0;
             }
+
+            if (curve.isCurveBtnOn) btnCycleLines.Text = "Cu-" + curve.numCurveLineSelected;
+            if (ABLine.isBtnABLineOn) btnCycleLines.Text = "AB-" + ABLine.numABLineSelected;
+
         }
 
         public void KeypadToNUD(NumericUpDown sender)
@@ -1038,6 +1059,7 @@ namespace AgOpenGPS
             btnContour.Enabled = true;
             btnCurve.Enabled = true;
             btnMakeLinesFromBoundary.Enabled = true;
+            btnCycleLines.Enabled = true;
 
 
             ABLine.abHeading = 0.00;
@@ -1058,11 +1080,13 @@ namespace AgOpenGPS
 
             //update the menu
             fieldToolStripMenuItem.Text = gStr.gsCloseField;
+            this.menustripLanguage.Enabled = false;
         }
 
         //close the current job
         public void JobClose()
         {
+            menustripLanguage.Enabled = true;
             //job is closed
             isJobStarted = false;
 
@@ -1154,6 +1178,7 @@ namespace AgOpenGPS
             ct.isContourOn = false;
 
             btnMakeLinesFromBoundary.Enabled = false;
+            btnCycleLines.Enabled = false;
 
             //AutoSteer
             btnAutoSteer.Enabled = false;
@@ -1339,12 +1364,12 @@ namespace AgOpenGPS
                 case 3: //Relay 1
                     if (action == 0)
                     {
-                        TimedMessageBox(1000, seq.pos3, "Turn Off");
+                        TimedMessageBox(1000, seq.pos3, gStr.gsTurnOff);
                         mc.machineControlData[mc.cnYouTurn] &= 0b11111110;
                     }
                     else
                     {
-                        TimedMessageBox(1000, seq.pos3, "Turn On");
+                        TimedMessageBox(1000, seq.pos3, gStr.gsTurnOn);
                         mc.machineControlData[mc.cnYouTurn] |= 0b00000001;
                     }
                     break;
@@ -1352,12 +1377,12 @@ namespace AgOpenGPS
                 case 4: //Relay 2
                     if (action == 0)
                     {
-                        TimedMessageBox(1000, seq.pos4, "Turn Off");
+                        TimedMessageBox(1000, seq.pos4, gStr.gsTurnOff);
                         mc.machineControlData[mc.cnYouTurn] &= 0b11111101;
                     }
                     else
                     {
-                        TimedMessageBox(1000, seq.pos4, "Turn On");
+                        TimedMessageBox(1000, seq.pos4, gStr.gsTurnOn);
                         mc.machineControlData[mc.cnYouTurn] |= 0b00000010;
                     }
                     break;
@@ -1365,12 +1390,12 @@ namespace AgOpenGPS
                 case 5: //Relay 3
                     if (action == 0)
                     {
-                        TimedMessageBox(1000, seq.pos5, "Turn Off");
+                        TimedMessageBox(1000, seq.pos5, gStr.gsTurnOff);
                         mc.machineControlData[mc.cnYouTurn] &= 0b11111011;
                     }
                     else
                     {
-                        TimedMessageBox(1000, seq.pos5, "Turn On");
+                        TimedMessageBox(1000, seq.pos5, gStr.gsTurnOn);
                         mc.machineControlData[mc.cnYouTurn] |= 0b00000100;
                     }
                     break;
@@ -1378,12 +1403,12 @@ namespace AgOpenGPS
                 case 6: //Relay 4
                     if (action == 0)
                     {
-                        TimedMessageBox(1000, seq.pos6, "Turn Off");
+                        TimedMessageBox(1000, seq.pos6, gStr.gsTurnOff);
                         mc.machineControlData[mc.cnYouTurn] &= 0b11110111;
                     }
                     else
                     {
-                        TimedMessageBox(1000, seq.pos6, "Turn On");
+                        TimedMessageBox(1000, seq.pos6, gStr.gsTurnOn);
                         mc.machineControlData[mc.cnYouTurn] |= 0b00001000;
                     }
                     break;
@@ -1391,12 +1416,12 @@ namespace AgOpenGPS
                 case 7: //Relay 5
                     if (action == 0)
                     {
-                        TimedMessageBox(1000, seq.pos7, "Turn Off");
+                        TimedMessageBox(1000, seq.pos7, gStr.gsTurnOff);
                         mc.machineControlData[mc.cnYouTurn] &= 0b11101111;
                     }
                     else
                     {
-                        TimedMessageBox(1000, seq.pos7, "Turn On");
+                        TimedMessageBox(1000, seq.pos7, gStr.gsTurnOn);
                         mc.machineControlData[mc.cnYouTurn] |= 0b00010000;
                     }
                     break;
@@ -1404,12 +1429,12 @@ namespace AgOpenGPS
                 case 8: //Relay 6
                     if (action == 0)
                     {
-                        TimedMessageBox(1000, seq.pos8, "Turn Off");
+                        TimedMessageBox(1000, seq.pos8, gStr.gsTurnOff);
                         mc.machineControlData[mc.cnYouTurn] &= 0b11011111;
                     }
                     else
                     {
-                        TimedMessageBox(1000, seq.pos8, "Turn On");
+                        TimedMessageBox(1000, seq.pos8, gStr.gsTurnOn);
                         mc.machineControlData[mc.cnYouTurn] |= 0b00100000;
                     }
                     break;

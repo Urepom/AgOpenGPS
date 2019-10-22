@@ -43,7 +43,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\Application\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -56,7 +56,7 @@
     </NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DebugSymbols>true</DebugSymbols>
+    <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>AppIcon.ico</ApplicationIcon>
@@ -69,17 +69,20 @@
   <PropertyGroup />
   <PropertyGroup />
   <ItemGroup>
-    <Reference Include="OpenTK, Version=1.2.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+    <Reference Include="Keypad, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Application\OpenTK.dll</HintPath>
+      <HintPath>References\Keypad.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>References\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.GLControl, Version=1.2.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Application\OpenTK.GLControl.dll</HintPath>
+      <HintPath>References\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="RepeatButtonControl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Application\RepeatButtonControl.dll</HintPath>
+      <HintPath>References\RepeatButtonControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -93,11 +96,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="Tinkerforge, Version=2.1.16.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Application\Tinkerforge.dll</HintPath>
+      <HintPath>References\Tinkerforge.dll</HintPath>
     </Reference>
     <Reference Include="WebEye.Controls.WinForms.WebCameraControl, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Application\WebEye.Controls.WinForms.WebCameraControl.dll</HintPath>
+      <HintPath>References\WebEye.Controls.WinForms.WebCameraControl.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -160,12 +163,6 @@
     </Compile>
     <Compile Include="Forms\FormABDraw.Designer.cs">
       <DependentUpon>FormABDraw.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormSwapAB.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormSwapAB.Designer.cs">
-      <DependentUpon>FormSwapAB.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormShortcutKeys.cs">
       <SubType>Form</SubType>
@@ -302,10 +299,30 @@
       <DependentUpon>FormTreePlant.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="gStr.de.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>gStr.de.resx</DependentUpon>
+    </Compile>
     <Compile Include="gStr.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>gStr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="gStr.fr.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>gStr.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="gStr.it.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>gStr.it.resx</DependentUpon>
+    </Compile>
+    <Compile Include="gStr.nl.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>gStr.nl.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -380,9 +397,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormABDraw.resx">
       <DependentUpon>FormABDraw.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormSwapAB.resx">
-      <DependentUpon>FormSwapAB.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormShortcutKeys.resx">
       <DependentUpon>FormShortcutKeys.cs</DependentUpon>
@@ -465,8 +479,22 @@
     <EmbeddedResource Include="Forms\FormTreePlant.resx">
       <DependentUpon>FormTreePlant.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="gStr.de.resx" />
-    <EmbeddedResource Include="gStr.fr.resx" />
+    <EmbeddedResource Include="gStr.de.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>gStr.de.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gStr.fr.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>gStr.fr.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gStr.it.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>gStr.it.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="gStr.nl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>gStr.nl.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="gStr.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>gStr.Designer.cs</LastGenOutput>
@@ -522,6 +550,25 @@
     <Content Include="AppIcon.ico" />
     <Content Include="AppIcon64.ico" />
     <Content Include="aChangeLog.txt" />
+    <None Include="Resources\Alarm10.wav" />
+    <None Include="btnImages\ABLineCycle.png" />
+    <None Include="btnImages\displayMenu.png" />
+    <None Include="btnImages\fileMenu.png" />
+    <None Include="btnImages\ABLineTurnOff.png" />
+    <None Include="btnImages\CurveTurnOff.png" />
+    <None Include="btnImages\SwitchOff.png" />
+    <None Include="btnImages\SwitchOn.png" />
+    <None Include="btnImages\AddNew.png" />
+    <None Include="btnImages\FileNewAndGo.png" />
+    <Content Include="Dependencies\Audio\Boundary.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\YouTurnShapes\SemiCircle.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\YouTurnShapes\WideReturn.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="btnImages\VehicleSettings.jpg" />
     <None Include="btnImages\ToolSettings.jpg" />
     <None Include="btnImages\VehAft64.png" />
@@ -661,21 +708,21 @@
     <None Include="btnImages\radar-icon.png" />
     <None Include="btnImages\MakeBoundaryContour.jpg" />
     <None Include="btnImages\VehicleSettingsAntenna.jpg" />
-    <Content Include="Dependencies\Floor.png" />
-    <Content Include="Dependencies\Landscape.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Dependencies\YouTurnShapes\Custom.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\Images\Floor.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\YouTurnShapes\Keyhole.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Dependencies\Images\Landscape.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ALicense.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Keypad\Keypad.csproj">
-      <Project>{F1053BAC-22C7-4E6F-A3EA-CC1E1FBA9CB0}</Project>
-      <Name>Keypad</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

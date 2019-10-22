@@ -1,4 +1,25 @@
-﻿v3.0 Aug/Sep 2019
+﻿v 3.0.0
+* Removed all executables from Source
+* Source contains all packages for release to be created
+* Ready to start intial releases.
+* Add tool width to Touch lines.
+* Single curves and AB Lines no longer saved in separate file
+* CurveLines and ABLines text files contain all lines and are all loaded into lists.
+* Added no panel option
+* Page thru all lines or curves depending on guidance mode
+* Made uturn controls much smaller. 
+* Added distance alarm at 20 meters before uturn.
+
+v3.0 October
+
+* Languages added with single RESX file per culture
+* keypad added for nuds
+* AB Line moves when using draw based on eq width. 
+* French, German, Italian Added. 
+* added paths away to curve button
+* Touch Lines added for fast line creation and selecting/deleting
+
+v3.0 Aug/Sep 2019
 * sbNMEA used to capture GPS Data rather then rawbuffer which could be
 	changed by SerialData Delegate. 
 * Sim and GPS Port made much more difficult to change To Sim. 

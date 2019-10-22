@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -18,8 +18,107 @@ namespace AgOpenGPS
         public FormYouTurn(Form callingForm)
         {
             mf = callingForm as FormGPS;
+
+            //winform initialization
             InitializeComponent();
-        }
+
+            
+            this.Text = gStr.gsUTurn;
+
+            // U Turn tab
+            tabYouTurn.Text = gStr.gsUTurn;
+            btnYouTurnCustom.Text = gStr.gsCustom;
+            btnTurnAllOff.Text = gStr.gsTurnallOff;
+            label46.Text = gStr.gsDubins + " " + gStr.gsPattern;
+            label1.Text = gStr.gsSkips;
+            btnIsUsingDubins.Text = gStr.gsDubins;
+            label48.Text = gStr.gsUTurnDistance + " " + gStr.gsFromBounds;
+            label49.Text = gStr.gsGeoFenceDist + " " + gStr.gsFromBounds;
+            groupBox1.Text = gStr.gsTurnPatterns;
+            lblWhenTrig.Text = gStr.gsUTurnLength;
+            btnYouTurnRecord.Text = gStr.gsRecord;
+
+            // Entry tab
+            tabEnter.Text = gStr.gsEntry;
+            label13.Text = gStr.gsFunction;
+            label15.Text = gStr.gsAction;
+            label14.Text = gStr.gsDistance;
+            cboxExitAction0.Items.Clear();
+            this.cboxExitAction0.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            cboxEnterAction7.Items.Clear();
+            this.cboxEnterAction7.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            cboxEnterAction5.Items.Clear();
+            this.cboxEnterAction5.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            cboxEnterAction6.Items.Clear();
+            this.cboxEnterAction6.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            cboxEnterAction4.Items.Clear();
+            this.cboxEnterAction4.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            cboxEnterAction3.Items.Clear();
+            this.cboxEnterAction3.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            cboxEnterAction2.Items.Clear();
+            this.cboxEnterAction2.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            cboxEnterAction1.Items.Clear();
+            this.cboxEnterAction1.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            cboxEnterAction0.Items.Clear();
+            this.cboxEnterAction0.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+
+            // Exit tab
+            tabExit.Text = gStr.gsExit;
+            label16.Text = gStr.gsAction;
+            label18.Text = gStr.gsFunction;
+            label17.Text = gStr.gsDistance;
+            cboxExitAction7.Items.Clear();
+            this.cboxExitAction7.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            cboxExitAction5.Items.Clear();
+            this.cboxExitAction5.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            this.cboxExitAction6.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            cboxExitAction4.Items.Clear();
+            this.cboxExitAction4.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            cboxExitAction3.Items.Clear();
+            this.cboxExitAction3.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            cboxExitAction2.Items.Clear();
+            this.cboxExitAction2.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+            cboxExitAction1.Items.Clear();
+            this.cboxExitAction1.Items.AddRange(new object[] {
+            gStr.gsTurnOff,
+            gStr.gsTurnOn});
+
+            // Edit tab
+            tabEdit.Text = gStr.gsEdit;           
+            label44.Text = gStr.gsCancel;
+            label43.Text = gStr.gsSaveNames;
+       
+    }
 
         private void FormYouTurn_Load(object sender, EventArgs e)
         {
@@ -91,7 +190,7 @@ namespace AgOpenGPS
             //update dubins button
             if (!mf.yt.isUsingDubinsTurn)
             {
-                btnIsUsingDubins.Text = "Pattern";
+                btnIsUsingDubins.Text = gStr.gsPattern;
                 btnIsUsingDubins.BackColor = Color.Salmon;
                 btnYouTurnCustom.Enabled = true;
                 btnYouTurnKeyHole.Enabled = true;
@@ -101,7 +200,7 @@ namespace AgOpenGPS
             }
             else
             {
-                btnIsUsingDubins.Text = "Dubins";
+                btnIsUsingDubins.Text = gStr.gsDubins;
                 btnIsUsingDubins.BackColor = Color.LightGreen;
                 btnYouTurnCustom.Enabled = false;
                 btnYouTurnKeyHole.Enabled = false;
@@ -667,7 +766,7 @@ namespace AgOpenGPS
 
         private void btnYouTurnKeyHole_Click(object sender, EventArgs e)
         {
-            mf.yt.LoadYouTurnShapeFromFile(@".\YouTurnShapes\KeyHole.txt");
+            mf.yt.LoadYouTurnShapeFromFile(@".\Dependencies/YouTurnShapes\KeyHole.txt");
             Properties.Settings.Default.setAS_youTurnShape = "KeyHole.txt";
             Properties.Settings.Default.Save();
             btnYouTurnKeyHole.BackColor = Color.LimeGreen;
@@ -678,7 +777,7 @@ namespace AgOpenGPS
 
         private void btnYouTurnSemiCircle_Click(object sender, EventArgs e)
         {
-            mf.yt.LoadYouTurnShapeFromFile(@".\YouTurnShapes\SemiCircle.txt");
+            mf.yt.LoadYouTurnShapeFromFile(@".\Dependencies\YouTurnShapes\SemiCircle.txt");
             Properties.Settings.Default.setAS_youTurnShape = "SemiCircle.txt";
             Properties.Settings.Default.Save();
             btnYouTurnKeyHole.BackColor = Color.Silver;
@@ -689,7 +788,7 @@ namespace AgOpenGPS
 
         private void btnYouTurnWideReturn_Click(object sender, EventArgs e)
         {
-            mf.yt.LoadYouTurnShapeFromFile(@".\YouTurnShapes\WideReturn.txt");
+            mf.yt.LoadYouTurnShapeFromFile(@".\Dependencies\YouTurnShapes\WideReturn.txt");
             Properties.Settings.Default.setAS_youTurnShape = "WideReturn.txt";
             Properties.Settings.Default.Save();
             btnYouTurnKeyHole.BackColor = Color.Silver;
@@ -700,7 +799,7 @@ namespace AgOpenGPS
 
         private void btnYouTurnCustom_Click(object sender, EventArgs e)
         {
-            mf.yt.LoadYouTurnShapeFromFile(@".\YouTurnShapes\Custom.txt");
+            mf.yt.LoadYouTurnShapeFromFile(@".\Dependencies\YouTurnShapes\Custom.txt");
             Properties.Settings.Default.setAS_youTurnShape = "Custom.txt";
             Properties.Settings.Default.Save();
             btnYouTurnKeyHole.BackColor = Color.Silver;
@@ -725,7 +824,7 @@ namespace AgOpenGPS
             if (mf.yt.isUsingDubinsTurn)
             {
                 mf.yt.isUsingDubinsTurn = false;
-                btnIsUsingDubins.Text = "Pattern";
+                btnIsUsingDubins.Text = gStr.gsPattern;
                 btnIsUsingDubins.BackColor = Color.Salmon;
                 btnYouTurnCustom.Enabled = true;
                 btnYouTurnKeyHole.Enabled = true;
@@ -736,7 +835,7 @@ namespace AgOpenGPS
             else
             {
                 mf.yt.isUsingDubinsTurn = true;
-                btnIsUsingDubins.Text = "Dubins";
+                btnIsUsingDubins.Text = gStr.gsDubins;
                 btnIsUsingDubins.BackColor = Color.LightGreen;
                 btnYouTurnCustom.Enabled = false;
                 btnYouTurnKeyHole.Enabled = false;
@@ -760,7 +859,7 @@ namespace AgOpenGPS
             if (mf.yt.youTurnStartOffset-- < 4) mf.yt.youTurnStartOffset = 3;
             lblDistance.Text = Math.Abs(mf.yt.youTurnStartOffset).ToString() + " m";
             if (mf.yt.youTurnStartOffset < 0) lblWhenTrig.Text = "Before";
-            else lblWhenTrig.Text = "After";
+            else lblWhenTrig.Text = gStr.gsAfter;
         }
 
         private void btnDistanceUp_Click(object sender, EventArgs e)
@@ -768,7 +867,7 @@ namespace AgOpenGPS
             if (mf.yt.youTurnStartOffset++ > 49) mf.yt.youTurnStartOffset = 50;
             lblDistance.Text = Math.Abs(mf.yt.youTurnStartOffset).ToString() + " m";
             if (mf.yt.youTurnStartOffset < 0) lblWhenTrig.Text = "Before";
-            else lblWhenTrig.Text = "After";
+            else lblWhenTrig.Text = gStr.gsAfter;
         }
 
         private void btnTriggerDistanceUp_MouseDown(object sender, MouseEventArgs e)

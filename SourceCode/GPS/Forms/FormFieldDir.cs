@@ -111,7 +111,7 @@ namespace AgOpenGPS
             if (ofd.ShowDialog() == DialogResult.Cancel)
             {
                 isTemplateSet = false;
-                mf.TimedMessageBox(1500, "Template Cancelled", "You can still start a new field");
+                mf.TimedMessageBox(1500, gStr.gsTemplateCancelled, gStr.gsYoucanstillstartnewfield);
                 return;
             }
             else
@@ -147,6 +147,7 @@ namespace AgOpenGPS
             //get the directory and make sure it exists, create if not
             string dirNewField = mf.fieldsDirectory + mf.currentFieldDirectory + "\\";
 
+            mf.menustripLanguage.Enabled = false;
             //if no template set just make a new file.
             if (!isTemplateSet)
             {
@@ -160,7 +161,7 @@ namespace AgOpenGPS
 
                     if ((!string.IsNullOrEmpty(directoryName)) && (Directory.Exists(directoryName)))
                     {
-                        MessageBox.Show("Choose a different name", "Directory Exists", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        MessageBox.Show(gStr.gsChooseADifferentName, gStr.gsDirectoryExists, MessageBoxButtons.OK, MessageBoxIcon.Stop);
                         return;
                     }
                     else
@@ -190,8 +191,8 @@ namespace AgOpenGPS
                         mf.FileCreateContour();
                         mf.FileCreateElevation();
                         mf.FileSaveFlags();
-                        mf.FileSaveABLine();
-                        mf.FileSaveCurveLine();
+                        //mf.FileSaveABLine();
+                        //mf.FileSaveCurveLine();
                         //mf.FileSaveHeadland();
                     }
                 }
@@ -199,7 +200,7 @@ namespace AgOpenGPS
                 {
                     mf.WriteErrorLog("Creating new field " + ex);
 
-                    MessageBox.Show("Error", ex.ToString());
+                    MessageBox.Show(gStr.gsError, ex.ToString());
                     mf.currentFieldDirectory = "";
                 }
             }
@@ -210,7 +211,7 @@ namespace AgOpenGPS
 
                 if ((!string.IsNullOrEmpty(directoryName)) && (Directory.Exists(directoryName)))
                 {
-                    MessageBox.Show("Choose a different name", "Directory Exists", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    MessageBox.Show(gStr.gsChooseADifferentName, gStr.gsDirectoryExists, MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return;
                 }
                 else
@@ -245,7 +246,7 @@ namespace AgOpenGPS
                     {
                         mf.WriteErrorLog("While Opening Field" + ex);
 
-                        var form = new FormTimedMessage(2000, "Field File is Corrupt", "Choose a different field");
+                        var form = new FormTimedMessage(2000, gStr.gsFieldFileIsCorrupt, gStr.gsChooseADifferentField);
                         form.Show();
                         mf.JobClose();
                         return;

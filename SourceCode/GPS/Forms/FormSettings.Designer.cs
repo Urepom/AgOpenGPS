@@ -101,6 +101,8 @@
             this.nudSection1 = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.tabGuidance = new System.Windows.Forms.TabPage();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.nudLineWidth = new System.Windows.Forms.NumericUpDown();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.nudLightbarCmPerPixel = new System.Windows.Forms.NumericUpDown();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
@@ -157,6 +159,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudSection2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSection1)).BeginInit();
             this.tabGuidance.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLineWidth)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLightbarCmPerPixel)).BeginInit();
             this.groupBox9.SuspendLayout();
@@ -578,24 +582,22 @@
             // 
             // label25
             // 
-            this.label25.AutoSize = true;
             this.label25.Font = new System.Drawing.Font("Tahoma", 14.25F);
             this.label25.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label25.Location = new System.Drawing.Point(527, 484);
+            this.label25.Location = new System.Drawing.Point(466, 484);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(72, 23);
+            this.label25.Size = new System.Drawing.Size(131, 23);
             this.label25.TabIndex = 118;
             this.label25.Text = "Left is -";
-            this.label25.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label13
             // 
-            this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Tahoma", 14.25F);
             this.label13.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.label13.Location = new System.Drawing.Point(761, 484);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(92, 23);
+            this.label13.Size = new System.Drawing.Size(151, 23);
             this.label13.TabIndex = 117;
             this.label13.Text = "Right is +";
             // 
@@ -1442,6 +1444,7 @@
             // tabGuidance
             // 
             this.tabGuidance.BackColor = System.Drawing.SystemColors.Window;
+            this.tabGuidance.Controls.Add(this.groupBox4);
             this.tabGuidance.Controls.Add(this.groupBox2);
             this.tabGuidance.Controls.Add(this.groupBox9);
             this.tabGuidance.Controls.Add(this.groupBox8);
@@ -1453,13 +1456,51 @@
             this.tabGuidance.TabIndex = 13;
             this.tabGuidance.Text = " Guidance ";
             // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.nudLineWidth);
+            this.groupBox4.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox4.Location = new System.Drawing.Point(714, 59);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(232, 172);
+            this.groupBox4.TabIndex = 124;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Guidance Line Width";
+            // 
+            // nudLineWidth
+            // 
+            this.nudLineWidth.BackColor = System.Drawing.Color.AliceBlue;
+            this.nudLineWidth.Font = new System.Drawing.Font("Tahoma", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudLineWidth.InterceptArrowKeys = false;
+            this.nudLineWidth.Location = new System.Drawing.Point(44, 76);
+            this.nudLineWidth.Maximum = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.nudLineWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudLineWidth.Name = "nudLineWidth";
+            this.nudLineWidth.Size = new System.Drawing.Size(148, 65);
+            this.nudLineWidth.TabIndex = 118;
+            this.nudLineWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nudLineWidth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudLineWidth.Enter += new System.EventHandler(this.nudLineWidth_Enter);
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.nudLightbarCmPerPixel);
             this.groupBox2.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(414, 59);
+            this.groupBox2.Location = new System.Drawing.Point(394, 59);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(341, 142);
+            this.groupBox2.Size = new System.Drawing.Size(250, 172);
             this.groupBox2.TabIndex = 123;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "cm / Lightbar Pixel";
@@ -1469,7 +1510,7 @@
             this.nudLightbarCmPerPixel.BackColor = System.Drawing.Color.AliceBlue;
             this.nudLightbarCmPerPixel.Font = new System.Drawing.Font("Tahoma", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nudLightbarCmPerPixel.InterceptArrowKeys = false;
-            this.nudLightbarCmPerPixel.Location = new System.Drawing.Point(23, 40);
+            this.nudLightbarCmPerPixel.Location = new System.Drawing.Point(26, 73);
             this.nudLightbarCmPerPixel.Maximum = new decimal(new int[] {
             20,
             0,
@@ -1496,9 +1537,9 @@
             // 
             this.groupBox9.Controls.Add(this.cboxAutoSteerAuto);
             this.groupBox9.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox9.Location = new System.Drawing.Point(415, 262);
+            this.groupBox9.Location = new System.Drawing.Point(394, 288);
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(340, 192);
+            this.groupBox9.Size = new System.Drawing.Size(250, 192);
             this.groupBox9.TabIndex = 92;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "Auto/Manual AutoSteer Button";
@@ -1509,9 +1550,9 @@
             this.cboxAutoSteerAuto.AutoSize = true;
             this.cboxAutoSteerAuto.FlatAppearance.BorderSize = 3;
             this.cboxAutoSteerAuto.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cboxAutoSteerAuto.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cboxAutoSteerAuto.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboxAutoSteerAuto.Image = global::AgOpenGPS.Properties.Resources.AutoSteerOn;
-            this.cboxAutoSteerAuto.Location = new System.Drawing.Point(60, 65);
+            this.cboxAutoSteerAuto.Location = new System.Drawing.Point(60, 79);
             this.cboxAutoSteerAuto.Name = "cboxAutoSteerAuto";
             this.cboxAutoSteerAuto.Size = new System.Drawing.Size(86, 96);
             this.cboxAutoSteerAuto.TabIndex = 0;
@@ -1526,7 +1567,7 @@
             this.groupBox8.Font = new System.Drawing.Font("Tahoma", 15.75F);
             this.groupBox8.Location = new System.Drawing.Point(45, 59);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(317, 142);
+            this.groupBox8.Size = new System.Drawing.Size(279, 172);
             this.groupBox8.TabIndex = 91;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "< > Snap Distance (cm)";
@@ -1536,7 +1577,7 @@
             this.nudSnapDistanceSmall.BackColor = System.Drawing.Color.AliceBlue;
             this.nudSnapDistanceSmall.Font = new System.Drawing.Font("Tahoma", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nudSnapDistanceSmall.InterceptArrowKeys = false;
-            this.nudSnapDistanceSmall.Location = new System.Drawing.Point(23, 40);
+            this.nudSnapDistanceSmall.Location = new System.Drawing.Point(23, 73);
             this.nudSnapDistanceSmall.Maximum = new decimal(new int[] {
             500,
             0,
@@ -1558,9 +1599,9 @@
             // 
             this.groupBox1.Controls.Add(this.nudSnapDistance);
             this.groupBox1.Font = new System.Drawing.Font("Tahoma", 15.75F);
-            this.groupBox1.Location = new System.Drawing.Point(45, 262);
+            this.groupBox1.Location = new System.Drawing.Point(45, 288);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(317, 142);
+            this.groupBox1.Size = new System.Drawing.Size(279, 168);
             this.groupBox1.TabIndex = 90;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "<< >> Snap Distance";
@@ -1570,7 +1611,7 @@
             this.nudSnapDistance.BackColor = System.Drawing.Color.AliceBlue;
             this.nudSnapDistance.Font = new System.Drawing.Font("Tahoma", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nudSnapDistance.InterceptArrowKeys = false;
-            this.nudSnapDistance.Location = new System.Drawing.Point(23, 32);
+            this.nudSnapDistance.Location = new System.Drawing.Point(23, 73);
             this.nudSnapDistance.Maximum = new decimal(new int[] {
             500,
             0,
@@ -1668,9 +1709,9 @@
             // 
             this.lblDoNotExceed.Font = new System.Drawing.Font("Tahoma", 15.75F);
             this.lblDoNotExceed.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblDoNotExceed.Location = new System.Drawing.Point(254, 623);
+            this.lblDoNotExceed.Location = new System.Drawing.Point(252, 623);
             this.lblDoNotExceed.Name = "lblDoNotExceed";
-            this.lblDoNotExceed.Size = new System.Drawing.Size(346, 25);
+            this.lblDoNotExceed.Size = new System.Drawing.Size(391, 25);
             this.lblDoNotExceed.TabIndex = 24;
             this.lblDoNotExceed.Text = "* Do not exceed 1570 *";
             this.lblDoNotExceed.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1680,7 +1721,7 @@
             this.lblSecTotalWidthInches.AutoSize = true;
             this.lblSecTotalWidthInches.Font = new System.Drawing.Font("Tahoma", 21.75F, System.Drawing.FontStyle.Bold);
             this.lblSecTotalWidthInches.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblSecTotalWidthInches.Location = new System.Drawing.Point(494, 648);
+            this.lblSecTotalWidthInches.Location = new System.Drawing.Point(537, 648);
             this.lblSecTotalWidthInches.Name = "lblSecTotalWidthInches";
             this.lblSecTotalWidthInches.Size = new System.Drawing.Size(43, 35);
             this.lblSecTotalWidthInches.TabIndex = 25;
@@ -1691,7 +1732,7 @@
             this.lblSecTotalWidthFeet.AutoSize = true;
             this.lblSecTotalWidthFeet.Font = new System.Drawing.Font("Tahoma", 21.75F, System.Drawing.FontStyle.Bold);
             this.lblSecTotalWidthFeet.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblSecTotalWidthFeet.Location = new System.Drawing.Point(413, 648);
+            this.lblSecTotalWidthFeet.Location = new System.Drawing.Point(456, 648);
             this.lblSecTotalWidthFeet.Name = "lblSecTotalWidthFeet";
             this.lblSecTotalWidthFeet.Size = new System.Drawing.Size(49, 35);
             this.lblSecTotalWidthFeet.TabIndex = 24;
@@ -1710,12 +1751,11 @@
             // 
             // label16
             // 
-            this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Tahoma", 15.75F);
             this.label16.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label16.Location = new System.Drawing.Point(289, 653);
+            this.label16.Location = new System.Drawing.Point(272, 653);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(120, 25);
+            this.label16.Size = new System.Drawing.Size(180, 25);
             this.label16.TabIndex = 107;
             this.label16.Text = "Tool Width:";
             this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1725,7 +1765,7 @@
             this.lblSecTotalWidthMeters.AutoSize = true;
             this.lblSecTotalWidthMeters.Font = new System.Drawing.Font("Tahoma", 21.75F, System.Drawing.FontStyle.Bold);
             this.lblSecTotalWidthMeters.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblSecTotalWidthMeters.Location = new System.Drawing.Point(452, 648);
+            this.lblSecTotalWidthMeters.Location = new System.Drawing.Point(495, 648);
             this.lblSecTotalWidthMeters.Name = "lblSecTotalWidthMeters";
             this.lblSecTotalWidthMeters.Size = new System.Drawing.Size(43, 35);
             this.lblSecTotalWidthMeters.TabIndex = 108;
@@ -1813,7 +1853,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudAntennaPivot)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAntennaOffset)).EndInit();
             this.tabTool.ResumeLayout(false);
-            this.tabTool.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudOffset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTankHitch)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTurnOffDelay)).EndInit();
@@ -1837,6 +1876,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudSection2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSection1)).EndInit();
             this.tabGuidance.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nudLineWidth)).EndInit();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudLightbarCmPerPixel)).EndInit();
             this.groupBox9.ResumeLayout(false);
@@ -1951,5 +1992,7 @@
         private System.Windows.Forms.NumericUpDown nudLightbarCmPerPixel;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.ComboBox cboxNumSections;
+        private System.Windows.Forms.NumericUpDown nudLineWidth;
+        private System.Windows.Forms.GroupBox groupBox4;
     }
 }

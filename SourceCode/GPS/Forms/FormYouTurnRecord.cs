@@ -14,6 +14,10 @@ namespace AgOpenGPS
         {
             mf = callingForm as FormGPS;
             InitializeComponent();
+            btnStop.Text = gStr.gsDone;
+            btnRecord.Text = gStr.gsRecord;
+            label1.Text = gStr.gsTurnRIGHTwhilerecording;
+            this.Text = gStr.gsYouTurnRecorder;
         }
 
         private void btnRecord_Click(object sender, EventArgs e)
@@ -83,7 +87,7 @@ namespace AgOpenGPS
             //create the file.
             string dir = System.Reflection.Assembly.GetExecutingAssembly().Location;
             dir = System.IO.Path.GetDirectoryName(dir);
-            dir += @"\YouTurnShapes\Custom.txt";
+            dir += @"\Dependencies\YouTurnShapes\Custom.txt";
             using (StreamWriter writer = new StreamWriter(dir))
             {
                 writer.WriteLine(pt.Length);

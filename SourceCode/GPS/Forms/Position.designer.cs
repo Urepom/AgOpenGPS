@@ -358,14 +358,14 @@ namespace AgOpenGPS
                 }
 
                 //fill up0 the appropriate arrays with new values
-                mc.autoSteerData[mc.sdSpeed] = (byte)(pn.speed * 4.0);
+                mc.autoSteerData[mc.sdSpeed] = unchecked((byte)(pn.speed * 4.0));
                 mc.machineControlData[mc.cnSpeed] = mc.autoSteerData[mc.sdSpeed];
 
-                mc.autoSteerData[mc.sdDistanceHi] = (byte)(guidanceLineDistanceOff >> 8);
-                mc.autoSteerData[mc.sdDistanceLo] = (byte)guidanceLineDistanceOff;
+                mc.autoSteerData[mc.sdDistanceHi] = unchecked((byte)(guidanceLineDistanceOff >> 8));
+                mc.autoSteerData[mc.sdDistanceLo] = unchecked((byte)(guidanceLineDistanceOff));
 
-                mc.autoSteerData[mc.sdSteerAngleHi] = (byte)(guidanceLineSteerAngle >> 8);
-                mc.autoSteerData[mc.sdSteerAngleLo] = (byte)guidanceLineSteerAngle;
+                mc.autoSteerData[mc.sdSteerAngleHi] = unchecked((byte)(guidanceLineSteerAngle >> 8));
+                mc.autoSteerData[mc.sdSteerAngleLo] = unchecked((byte)(guidanceLineSteerAngle));
 
                 //out serial to autosteer module  //indivdual classes load the distance and heading deltas 
                 AutoSteerDataOutToPort();
@@ -375,17 +375,17 @@ namespace AgOpenGPS
             {
                 //fill up the auto steer array with free drive values
                 //fill up the auto steer array with free drive values
-                mc.autoSteerData[mc.sdSpeed] = (byte)(pn.speed * 4.0 + 16);
+                mc.autoSteerData[mc.sdSpeed] = unchecked((byte)(pn.speed * 4.0 + 16));
                 mc.machineControlData[mc.cnSpeed] = mc.autoSteerData[mc.sdSpeed];
 
                 //make steer module think everything is normal
                 guidanceLineDistanceOff = 0;
-                mc.autoSteerData[mc.sdDistanceHi] = (byte)(0);
-                mc.autoSteerData[mc.sdDistanceLo] = (byte)0;
+                mc.autoSteerData[mc.sdDistanceHi] = unchecked((byte)(0));
+                mc.autoSteerData[mc.sdDistanceLo] = unchecked((byte)0);
 
                 guidanceLineSteerAngle = (Int16)(ast.driveFreeSteerAngle * 100);
-                mc.autoSteerData[mc.sdSteerAngleHi] = (byte)(guidanceLineSteerAngle >> 8);
-                mc.autoSteerData[mc.sdSteerAngleLo] = (byte)guidanceLineSteerAngle;
+                mc.autoSteerData[mc.sdSteerAngleHi] = unchecked((byte)(guidanceLineSteerAngle >> 8));
+                mc.autoSteerData[mc.sdSteerAngleLo] = unchecked((byte)(guidanceLineSteerAngle));
 
                 //out serial to autosteer module  //indivdual classes load the distance and heading deltas 
                 AutoSteerDataOutToPort();
@@ -468,9 +468,20 @@ namespace AgOpenGPS
                                 //distance from current pivot to first point of youturn pattern
                                 distancePivotToTurnLine = glm.Distance(yt.ytList[0], steerAxlePos);
 
+                                if ((distancePivotToTurnLine <= 20.0) && (distancePivotToTurnLine >= 18.0) && !yt.isYouTurnTriggered)
+
+                                    if (!isBoundAlarming)
+                                    {
+                                        sndBoundaryAlarm.Play();
+                                        isBoundAlarming = true;
+                                    }
+
                                 //if we are close enough to pattern, trigger.
                                 if ((distancePivotToTurnLine <= 1.0) && (distancePivotToTurnLine >= 0) && !yt.isYouTurnTriggered)
+                                {
                                     yt.YouTurnTrigger();
+                                    isBoundAlarming = false;
+                                }
                             }
                         }
                     } // end of isInWorkingArea
@@ -506,6 +517,8 @@ namespace AgOpenGPS
             //stop the timer and calc how long it took to do calcs and draw
             frameTime = (double)swFrame.ElapsedTicks / (double)System.Diagnostics.Stopwatch.Frequency * 1000;
         }
+
+        public bool isBoundAlarming;
 
 
         //all the hitch, pivot, section, trailing hitch, headings and fixes

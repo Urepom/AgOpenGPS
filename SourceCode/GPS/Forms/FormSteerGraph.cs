@@ -19,6 +19,13 @@ namespace AgOpenGPS
         {
             mf = callingForm as FormGPS;
             InitializeComponent();
+
+            this.label5.Text = gStr.gsSetPoint;
+            this.label1.Text = gStr.gsActual;
+
+            this.Text = gStr.gsSteerChart;
+
+
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -34,7 +41,7 @@ namespace AgOpenGPS
             {
                 dataSteerAngle = "0";
                 dataPWM = "-2";
-                lblSteerAng.Text = "Actual";
+                lblSteerAng.Text = gStr.gsActual;
                 lblPWM.Text = "Set";
             }
             else

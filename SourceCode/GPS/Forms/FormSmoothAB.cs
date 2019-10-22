@@ -15,6 +15,11 @@ namespace AgOpenGPS
             //get copy of the calling main form
             mf = callingForm as FormGPS;
             InitializeComponent();
+
+            this.bntOK.Text = gStr.gsForNow;
+            this.btnSave.Text = gStr.gsToFile;
+
+            this.Text = gStr.gsSmoothABCurve;
         }
 
         private void bntOK_Click(object sender, EventArgs e)
@@ -58,7 +63,7 @@ namespace AgOpenGPS
             mf.curve.isSmoothWindowOpen = false;
             mf.curve.SaveSmoothAsRefList();
             mf.curve.smooList?.Clear();
-            mf.FileSaveCurveLine();
+            //mf.FileSaveCurveLine();
             Close();
         }
     }

@@ -1,9 +1,11 @@
 
 # AgOpenGPS  ****  Guidance software
 
-https://agopengps.jimdosite.com/
+Most stable release here: https://github.com/farmerbriantee/AgOpenGPS/releases
 
-Discussed in detail http://www.thecombineforum.com/forums/31-technology/278810-agopengps.html
+Website: https://agopengps.jimdosite.com/
+
+Discussed in detail: https://agopengps.discourse.group/
 
 *** Important ****
 
